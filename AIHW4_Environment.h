@@ -100,7 +100,7 @@ public:
     string to_string() {
         stringstream ss;
 
-        ss << endl << "##";
+        ss << "##";
         for (int i = 0; i < grid_dimension; i++) {
             ss << "##";
         }

@@ -14,14 +14,26 @@
 using namespace std;
 
 void init_intro();
-
 AIHW4_environment init_environment();
 
 int main() {
+    // Setup prompts
     init_intro();
     AIHW4_environment environment = init_environment();
+    cout << endl;
 
+    // Display initial state of environment
+    cout << "== Initial Environment ==" << endl;
     cout << environment.to_string();
+
+    map<pair<int, int>, string> test;
+    test[pair<int, int>(1, 1)] = "Hi1";
+    test[pair<int, int>(1, 1)] = "Hi2";
+
+    for (map<pair<int, int>, string>::iterator it = test.begin(); it != test.end(); ++it) {
+        cout << it->first.first << ", " << it->first.second << " : " << it->second << endl;
+    }
+
     return 0;
 }
 
