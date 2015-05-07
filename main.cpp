@@ -30,7 +30,7 @@ int main() {
 }
 
 void init_intro() {
-    cout << "===================================" < < endl;
+    cout << "===================================" << endl;
     cout << "= Q-Learning: Trolls and Burglars =" << endl;
     cout << "===================================" << endl;
     cout << endl;
@@ -40,6 +40,10 @@ AIHW4_environment init_environment() {
     string file_name;
     cout << "Enter input file name: ";
     getline(cin, file_name);
+
+    if (file_name == "")
+        return AIHW4_environment("trolls1.txt");
+
     if (!ifstream(file_name.c_str()))
         cout << "Invalid input file name!" << endl;
     return AIHW4_environment(file_name);
