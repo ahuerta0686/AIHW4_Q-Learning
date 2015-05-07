@@ -26,19 +26,11 @@ int main() {
     cout << "== Initial Environment ==" << endl;
     cout << environment.to_string();
 
-    map<pair<int, int>, string> test;
-    test[pair<int, int>(1, 1)] = "Hi1";
-    test[pair<int, int>(1, 1)] = "Hi2";
-
-    for (map<pair<int, int>, string>::iterator it = test.begin(); it != test.end(); ++it) {
-        cout << it->first.first << ", " << it->first.second << " : " << it->second << endl;
-    }
-
     return 0;
 }
 
 void init_intro() {
-    cout << "===================================" << endl;
+    cout << "===================================" < < endl;
     cout << "= Q-Learning: Trolls and Burglars =" << endl;
     cout << "===================================" << endl;
     cout << endl;
