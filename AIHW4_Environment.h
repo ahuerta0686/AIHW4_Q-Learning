@@ -23,6 +23,8 @@ private:
     int grid_dimension;
     int num_trolls;
     int num_ponies;
+    int total_ponies;
+    map<pair<int, int>, char> locations_copy;
 
     /**
      *  @brief  Convert string to vector of tokens
@@ -56,6 +58,7 @@ public:
         grid_dimension = atoi(tokens[0].c_str());
         num_trolls = atoi(tokens[1].c_str());
         num_ponies = atoi(tokens[2].c_str());
+        total_ponies = num_ponies;
 
         // Read in escape location
         getline(in_file, current_line);
@@ -92,12 +95,75 @@ public:
             int y = atoi(tokens[i + 1].c_str());
             locations[pair<int, int>(x, y)] = 'T';
         }
+
+
+        locations_copy = map<pair<int, int>, char>(locations);
     }
 
     /**
-     *  @brief  Display visualization of the environment
+     *  @brief  Get the reward value for the given a state
+     *  @param  x:  The x value for the state
+     *  @param  y:  The y value for the state
      */
-    string to_string() {
+
+    double get_reward(int x, int y) {
+        pair<int, int> l(x, y);
+        switch (locations[l]) {
+            case 'X':
+                return 0;
+            case '-':
+                locations[l] = 'X';
+                return 1;
+            case 'P':
+                num_ponies--;
+                locations[l] = 'X';
+                return 10;
+            case 'T':
+                return -11;
+            case 'E':
+                return 11;
+            case 0:
+                locations[l] = 'X';
+                return 1;
+            default:
+                return 0;
+        }
+    }
+
+    string pony_report() {
+        return num_ponies + " / " + total_ponies;
+    }
+
+    void reset() {
+        locations = map<pair<int, int>, char>(locations_copy);
+        num_ponies = total_ponies;
+    }
+
+    int get_dimension() {
+        return grid_dimension;
+    }
+
+    /**
+     *  @brief  Find out what is in a space in the grid given (x, y)
+     *  @param  x:  The x value in question
+     *  @param  y:  The y value in question
+     */
+    char check_location(int x, int y) {
+        if (x < 0 or x >= grid_dimension or y < 0 or y >= grid_dimension)
+            return '#';
+
+        pair<int, int> l(x, y);
+        char output = locations[l];
+        if (output != 0)
+            return output;
+        else
+            return '-';
+    }
+
+    /**
+     *  @brief  Return string with a visualization of the grid
+     */
+    string to_string(int x, int y) {
         stringstream ss;
 
         ss << "##";
@@ -110,8 +176,13 @@ public:
             ss << "##" << " ";
             for (int j = 0; j < grid_dimension; j++) {
                 map<pair<int, int>, char>::iterator it = locations.find(pair<int, int>(j, i));
-                if (it != locations.end()) {
+                if (x == j && y == i) {
+                    ss << 'B' << " ";
+                }
+                else if (it != locations.end()) {
                     char c = it->second;
+                    if (c == 0)
+                        c = 'X';
                     ss << c << " ";
                 }
                 else {
